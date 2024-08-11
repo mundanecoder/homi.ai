@@ -1,0 +1,96 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          String           @id @default(uuid()) @db.Uuid
+  name        String
+  email       String           @unique
+  password    String
+  isBuilder   Boolean          @default(false)
+  gender      String? // Optional: e.g., "Male", "Female", "Other"
+  avatar      String? // Optional: URL to the user's avatar image
+  projects    Project[]        @relation("BuilderProjects")
+  preferences UserPreferences? // User's preferences for properties
+  isdeleted   Boolean          @default(false)
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+}
+
+model UserPreferences {
+  id             String   @id @default(uuid()) @db.Uuid
+  userId         String   @unique @db.Uuid
+  user           User     @relation(fields: [userId], references: [id])
+  flatType       String // e.g., "2BHK", "3BHK", "Penthouse"
+  minBudget      Float? // Minimum budget for the property
+  maxBudget      Float? // Maximum budget for the property
+  preferredAreas String // Comma-separated list of preferred areas
+  minSize        Float? // Minimum size in square feet or meters
+  maxSize        Float? // Maximum size in square feet or meters
+  description    String? // A detailed description of the user's preferences for the flat
+  isdeleted      Boolean  @default(false)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+model Project {
+  id             String       @id @default(uuid()) @db.Uuid
+  name           String
+  location       String
+  description    String? // A more detailed description of the project
+  builder        User         @relation("BuilderProjects", fields: [builderId], references: [id])
+  builderId      String       @db.Uuid
+  status         String // e.g., "upcoming", "ongoing", "completed", "delayed"
+  priceRange     String // e.g., "₹50 Lakhs - ₹1 Crore"
+  projectType    String // e.g., "Residential", "Commercial", "Industrial"
+  completionDate DateTime?
+  images         Image[] // Relation to the Image model (one-to-many)
+  contactInfo    ContactInfo? // Relation to the ContactInfo model (one-to-one)
+  flatTypes      FlatType[] // Relation to the FlatType model (one-to-many)
+  isdeleted      Boolean      @default(false)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+}
+
+model FlatType {
+  id        String   @id @default(uuid()) @db.Uuid
+  type      String // e.g., "2BHK", "3BHK", "Penthouse"
+  bedrooms  Int // Number of bedrooms
+  bathrooms Int // Number of bathrooms
+  size      Float // Size in square feet or meters
+  price     Float // Price for this flat type
+  status    String // e.g., "available", "booked", "sold"
+  projectId String   @db.Uuid
+  project   Project  @relation(fields: [projectId], references: [id])
+  isdeleted Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Image {
+  id        String   @id @default(uuid()) @db.Uuid
+  url       String
+  altText   String? // A short description of the image
+  projectId String   @db.Uuid
+  project   Project  @relation(fields: [projectId], references: [id])
+  isdeleted Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ContactInfo {
+  id        String   @id @default(uuid()) @db.Uuid
+  phone     String
+  email     String
+  address   String? // Optional: Include if you want physical addresses for contact
+  projectId String   @unique @db.Uuid
+  project   Project  @relation(fields: [projectId], references: [id])
+  isdeleted Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
