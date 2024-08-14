@@ -23,7 +23,7 @@ const UserPreferenceForm: React.FC<UserPreferenceFormProps> = ({ token }) => {
 
   useEffect(() => {
     fetchPreferences();
-  }, [token]);
+  }, [token, preference]);
 
   const fetchPreferences = async () => {
     try {
