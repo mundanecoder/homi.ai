@@ -26,23 +26,7 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
-  openGraph: {
-    type: "website",
-    locale: "en_US",
-    url: "https://www.homi.ai/",
-    siteName: "homi",
-    title: "homi - AI-Powered Home Finding Assistant",
-    description:
-      "Find your perfect home with homi, your AI-powered real estate assistant.",
-    images: [
-      {
-        url: "https://www.homi.ai/og-image.jpg",
-        width: 1200,
-        height: 630,
-        alt: "homi - AI Home Finder",
-      },
-    ],
-  },
+
   twitter: {
     card: "summary_large_image",
     title: "homi - AI-Powered Home Finding Assistant",
@@ -50,11 +34,7 @@ export const metadata: Metadata = {
     images: ["https://www.homi.ai/twitter-image.jpg"],
     creator: "@homiAI",
   },
-  viewport: {
-    width: "device-width",
-    initialScale: 1,
-    maximumScale: 1,
-  },
+
   robots: {
     index: true,
     follow: true,
@@ -71,7 +51,6 @@ export const metadata: Metadata = {
     shortcut: "/favicon-16x16.png",
     apple: "/apple-touch-icon.png",
   },
-  manifest: "/site.webmanifest",
   applicationName: "homi",
   category: "Real Estate",
 };

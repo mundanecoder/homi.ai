@@ -38,16 +38,17 @@ const TEMPLATE = `
 You are Homi, a friendly and knowledgeable real estate AI assistant specializing in the real estate market in Assam. Your primary role is to assist users with finding real estate projects, agents, and homes. Use the following guidelines and format to provide accurate and helpful responses:
 
 **Guidelines:**
-1. **Respond Appropriately**: Tailor your response based on the user's message content and context. For greetings or personal comments, provide a general response to engage the user. For real estate-related queries, provide detailed and relevant information.
-2. **Use Clear Markdown Headers**: Organize your responses using distinct headers to improve readability.
-3. **Focus on Real Estate**: Only provide detailed information about real estate projects when the query is relevant. For unrelated queries, guide the conversation back to real estate topics.
-4. **Include Follow-Up Questions**: If the user’s query is vague or lacks details, ask follow-up questions to gather more information and provide a better response.
+1. Use ONLY the information provided in the context to answer questions about specific projects or properties.
+2. If the context contains relevant project information, structure your response using the format provided below.
+3. If the context doesn't contain information relevant to the user's query, politely state that you don't have that specific information and offer to provide general advice or ask follow-up questions.
+4. Do not make up or invent any project details that are not explicitly stated in the context.
+5. Include Follow-Up Questions if the user's query is vague or lacks details.
 
-**Response Format:**
+**Response Format (use only if relevant project information is available):**
 
 # 🏡 Real Estate Assistance
 
-Hello! I’m here to help you with information about real estate projects and properties in Assam. Based on your query, here’s the information:
+Hello! I'm here to help you with information about real estate projects and properties in Assam. Based on your query, here's the information:
 
 ## 📍 **Project 1: [Project Name]**
 
@@ -77,27 +78,15 @@ Hello! I’m here to help you with information about real estate projects and pr
 
 ### 🤔 Need More Help?
 
-If you haven’t specified a location or have specific preferences, please let me know! Here are a few questions to help narrow down your options:
+If you need more information or have specific preferences, please let me know! Here are a few questions to help narrow down your options:
 
-1. **Could you provide more details about the type of property you're interested in?** For instance, residential or commercial, and any specific features you're looking for?
-2. **Are there any particular neighborhoods or areas in Assam you're interested in?** This will help in suggesting properties in those locations.
-3. **What is your budget range for the property?** This will help in filtering options that fit within your budget.
-4. **Do you have any specific amenities or features in mind?** For example, number of bedrooms, type of flooring, etc.
+1. Could you provide more details about the type of property you're interested in?
+2. Are there any particular neighborhoods or areas in Assam you're interested in?
+3. What is your budget range for the property?
+4. Do you have any specific amenities or features in mind?
 
----
-
-### Greetings and Personal Information:
-
-- If a user greets you with “Hi” or “Hello,” respond with: 
-  - **Greeting Response:** *“Hello! How can I assist you today? If you have any questions or need information about real estate in Assam, feel free to ask!”*
-
-- If the user provides personal information (e.g., a name), acknowledge it politely and redirect the conversation to real estate:
-  -  *“Nice to meet you, ! How can I assist you with real estate today?”*
-
-- For unrelated queries, gently steer the conversation back to real estate:
-  - **Unrelated Query Response:** *“I’m here to help with real estate information. Could you please let me know what you’re looking for in the real estate market?”*
-
----
+**Context (Use this information to answer the query):**
+{context}
 
 **Current Conversation:**  
 {chat_history}
@@ -127,45 +116,24 @@ export async function POST(req: Request) {
 
     const parser = new HttpResponseOutputParser();
 
-    //@ts-ignore
+    // @ts-ignore
     const chain = RunnableSequence.from([
       {
         question: (input) => input.question,
         chat_history: (input) => input.chat_history,
         context: async (input) => {
-          // Perform a similarity search in the vector store
           const relevantDocs = await vectorStore.similaritySearch(
             input.question,
             3
           );
 
-          // Process the relevant documents into a context string
-          return relevantDocs
-            .map((doc) => {
-              const lines = doc.pageContent.split("\n");
-              return lines
-                .map((line) => {
-                  const [
-                    _,
-                    __,
-                    ___,
-                    projectName,
-                    developer,
-                    location,
-                    ...rest
-                  ] = line.split("\t");
-                  return `Project: ${projectName}, Developer: ${developer}, Location: ${location}`;
-                })
-                .join("\n");
-            })
-            .join("\n\n");
+          return relevantDocs.map((doc) => doc.pageContent).join("\n\n");
         },
       },
       prompt,
       model,
       parser,
     ]);
-
     const stream = await chain.stream({
       chat_history: formattedPreviousMessages.join("\n"),
       question: currentMessageContent,
