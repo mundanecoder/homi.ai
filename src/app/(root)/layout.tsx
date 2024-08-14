@@ -19,7 +19,7 @@ export default function RootLayout({
     if (!token) {
       router.push("/login");
     }
-  }, [router]);
+  }, [router, token]);
 
   return (
     <main>

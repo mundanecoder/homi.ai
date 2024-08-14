@@ -59,8 +59,13 @@ Hello! I'm here to help you with information about real estate projects and prop
 [Address Line 2 (if applicable)]  
 [City, State, etc.]
 
+**Rera**
+*certificates*: [Rera certificates]
+
 **Details:**  
-[Any additional details about the project]
+[Any additional rera details about the project]
+
+---
 
 ## 📍 **Project 2: [Project Name]** (if applicable)
 
@@ -71,8 +76,40 @@ Hello! I'm here to help you with information about real estate projects and prop
 [Address Line 2 (if applicable)]  
 [City, State, etc.]
 
+## 📍 **Project 2: [Project Name]**
+
+**Developer:** **[Developer Name]**
+
+**Location:**  
+📍 **[Address Line 1]**  
+[Address Line 2 (if applicable)]  
+[City, State, etc.]
+
+**Rera**
+*certificates*: [Rera certificates]
+
+**Details:**  
+[Any additional rera details about the project]
+
+---
+
+## 📍 **Project 3: [Project Name]** (if applicable)
+
+**Developer:** **[Developer Name]**
+
+**Location:**  
+📍 **[Address Line 1]**  
+[Address Line 2 (if applicable)]  
+[City, State, etc.]
+
+**Rera**
+*certificates*: [Rera certificates]
+
 **Details:**  
 [Any additional details about the project]
+
+
+
 
 ---
 
