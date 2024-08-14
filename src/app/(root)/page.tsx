@@ -15,7 +15,7 @@ export default function Page() {
   return (
     <div className="flex bg-gray-100 dark:bg-black h-[92vh]">
       <aside
-        className={`w-[14%] p-4 border bg-gray-200 dark:bg-black  hidden lg:block`}
+        className={`w-[14%] p-4 border bg-gray-200 dark:bg-black  hidden `}
       >
         <div className="flex justify-end">
           <ArrowBigLeft onClick={toggleSidebar} />
@@ -28,9 +28,7 @@ export default function Page() {
       </main>
 
       {/* Right Sidebar */}
-      <aside
-        className={`w-[14%] p-4 bg-gray-200 dark:bg-black border hidden lg:block`}
-      >
+      <aside className={`w-[14%] p-4 bg-gray-200 dark:bg-black border hidden `}>
         <h2 className="text-lg font-semibold">Right Sidebar</h2>
         {/* Add content for right sidebar here */}
       </aside>

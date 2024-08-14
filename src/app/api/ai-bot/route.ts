@@ -3,13 +3,12 @@ import {
   StreamingTextResponse,
   createStreamDataTransformer,
 } from "ai";
-import { ChatOpenAI } from "@langchain/openai";
 import { PromptTemplate } from "@langchain/core/prompts";
 import { HttpResponseOutputParser } from "langchain/output_parsers";
 import { RunnableSequence } from "@langchain/core/runnables";
 import { createClient } from "@supabase/supabase-js";
-import { SupabaseVectorStore } from "langchain/vectorstores/supabase";
-import { OpenAIEmbeddings } from "langchain/embeddings/openai";
+import { SupabaseVectorStore } from "@langchain/community/vectorstores/supabase";
+import { OpenAIEmbeddings, ChatOpenAI } from "@langchain/openai";
 
 export const dynamic = "force-dynamic";
 
@@ -120,7 +119,7 @@ export async function POST(req: Request) {
 
     const model = new ChatOpenAI({
       apiKey: process.env.OPENAI_API_KEY!,
-      model: "gpt-3.5-turbo",
+      model: "gpt-4o",
       temperature: 1,
       streaming: true,
       verbose: true,
@@ -128,6 +127,7 @@ export async function POST(req: Request) {
 
     const parser = new HttpResponseOutputParser();
 
+    //@ts-ignore
     const chain = RunnableSequence.from([
       {
         question: (input) => input.question,

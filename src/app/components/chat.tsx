@@ -11,7 +11,7 @@ export function Chat() {
     useChat({
       api: "api/ai-bot",
       onError: (e) => {
-        // console.log(e);
+        console.log(e);
       },
     });
   const chatParent = useRef<HTMLUListElement>(null);
@@ -21,14 +21,15 @@ export function Chat() {
     if (domNode) {
       domNode.scrollTop = domNode.scrollHeight;
     }
-  });
+  }, [messages]); // Add messages as dependency to update scroll position on new messages
 
+  console.log(messages);
   const dummyQuestions = [
     "What are the current real estate trends in my area?",
     "How can I find the best investment property?",
     "What should I know before buying a house?",
-    "what should I do to avoid getting scammed when getting a house?",
-    "Can you explain the different types of home loans available in india?",
+    "What should I do to avoid getting scammed when buying a house?",
+    "Find Me Residential flats from Dharapur , Guwahati?",
     "What are the eligibility criteria for obtaining a home loan?",
   ];
 
@@ -38,71 +39,67 @@ export function Chat() {
   };
 
   return (
-    <main className="flex items-center justify-center w-full h-[91vh] max-h-dvh bg-background dark:bg-black dark:text-white/80 ">
-      <section className="w-full max-w-5xl py-4 h-full flex items-center justify-center">
-        <section className="w-full h-full flex items-center justify-center">
-          <section className="container px-0 lg:pb-10 flex flex-col flex-grow gap-4 max-w-3xl h-full">
-            <section className="px-2 lg:px-0">
-              <form
-                onSubmit={handleSubmit}
-                className="flex w-full max-w-3xl mx-auto items-center"
-              >
-                <Input
-                  className="flex-1 min-h-[40px]"
-                  placeholder="Type your question here..."
-                  type="text"
-                  value={input}
-                  onChange={handleInputChange}
-                />
-                <Button className="ml-2" type="submit">
-                  Submit
-                </Button>
-              </form>
-            </section>
-            <ul
-              ref={chatParent}
-              className="h-[90vh] p-0 flex-grow bg-muted/50 rounded-lg overflow-y-auto flex flex-col gap-4 px-4 py-8"
-              style={{
-                scrollbarWidth: "none",
-              }}
-            >
-              {messages.length === 0 ? (
-                <div className="h-full my-4 items-center flex self-center ">
-                  <ul className="flex gap-2 flex-col text-sm">
-                    {dummyQuestions.map((question, index) => (
-                      <li
-                        key={index}
-                        className="flex justify-center items-center text-center text-primary px-4 border py-4 flex-col cursor-pointer hover:bg-muted"
-                        onClick={() => handleDummyQuestionClick(question)}
-                      >
-                        <p>{question}</p>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ) : (
-                messages.map((m, index) => (
-                  <div key={index}>
-                    {m.role === "user" ? (
-                      <li key={m.id} className="flex flex-row ">
-                        <div className="rounded-xl p-4 bg-background shadow-md flex border w-full ">
-                          <p className="text-sm">{m.content}</p>
-                        </div>
-                      </li>
-                    ) : (
-                      <li key={m.id} className="flex flex-row-reverse">
-                        <div className="rounded-xl p-4 bg-background shadow-sm flex w-full">
-                          <ReactMarkdown className="text-sm markdown-content">
-                            {m.content}
-                          </ReactMarkdown>
-                        </div>
-                      </li>
-                    )}
-                  </div>
-                ))
-              )}
-            </ul>
+    <main className="flex items-center justify-center w-full h-[91vh] max-h-dvh bg-gray-100 dark:bg-black dark:text-gray-300">
+      <section className="w-full max-w-4xl py-4 h-full flex flex-col">
+        <section className="flex-1 flex flex-col bg-white dark:bg-gray-800  border-gray-200 dark:border-gray-900 rounded-lg shadow-lg overflow-hidden">
+          <section className="p-4 flex-shrink-0  border-gray-200 dark:border-black">
+            <form onSubmit={handleSubmit} className="flex w-full items-center">
+              <Input
+                className="flex-1 min-h-[40px] border rounded-md"
+                placeholder="Type your question here..."
+                type="text"
+                value={input}
+                onChange={handleInputChange}
+              />
+              <Button className="ml-2" type="submit">
+                Submit
+              </Button>
+            </form>
           </section>
+          <ul
+            ref={chatParent}
+            className="flex-1 p-4 bg-gray-50 dark:bg-gray-900/50 rounded-lg overflow-y-auto flex flex-col gap-4"
+            style={{
+              scrollbarWidth: "thin",
+            }}
+          >
+            {messages.length === 0 ? (
+              <div className="flex flex-col items-center justify-center h-full">
+                <ul className="flex flex-col gap-2 text-sm">
+                  {dummyQuestions.map((question, index) => (
+                    <li
+                      key={index}
+                      className="px-4 py-3 border rounded-md cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+                      onClick={() => handleDummyQuestionClick(question)}
+                    >
+                      {question}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ) : (
+              messages.map((m, index) => (
+                <li
+                  key={index}
+                  className={`flex ${
+                    m.role === "user" ? "flex-row" : "flex-row-reverse"
+                  }`}
+                >
+                  <div
+                    className={`p-3 rounded-md shadow-sm flex-1 ${
+                      m.role === "user"
+                        ? "bg-gray-200 dark:bg-gray-800 text-gray-800 dark:text-gray-300"
+                        : "bg-blue-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100"
+                    }`}
+                  >
+                    <ReactMarkdown className="text-sm">
+                      {m.content}
+                    </ReactMarkdown>
+                  </div>
+                </li>
+              ))
+            )}
+          </ul>
         </section>
       </section>
     </main>

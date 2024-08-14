@@ -7,7 +7,7 @@ import { useTheme } from "next-themes";
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState<string | null>(null); // Use string or null
+  const [error, setError] = useState<string | null>(null);
   const router = useRouter();
   const { theme } = useTheme();
 
@@ -21,7 +21,6 @@ const LoginPage = () => {
 
   useEffect(() => {
     const token = getLocalToken("token");
-
     if (token) {
       router.push("/");
     }
@@ -65,8 +64,8 @@ const LoginPage = () => {
       }`}
     >
       <div className="w-full max-w-md p-8 bg-white dark:bg-gray-800 shadow-md rounded-lg">
-        <h2 className="text-2xl font-bold mb-6 text-center text-gray-800 dark:text-white">
-          Login
+        <h2 className="text-3xl font-bold mb-6 text-center text-gray-800 dark:text-white">
+          Welcome Back!
         </h2>
 
         {error && <p className="text-red-500 text-center mb-4">{error}</p>}
@@ -113,6 +112,18 @@ const LoginPage = () => {
             Log In
           </button>
         </form>
+
+        <div className="mt-6 text-center">
+          <p className="text-sm text-gray-600 dark:text-gray-400">
+            Don&apos;t have an account?
+            <a
+              href="/sign-up"
+              className="text-indigo-600 hover:text-indigo-500 font-semibold"
+            >
+              Sign Up
+            </a>
+          </p>
+        </div>
       </div>
     </div>
   );

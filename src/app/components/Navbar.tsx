@@ -4,6 +4,7 @@ import { PopOverComponent } from "@/components/ui/Popover";
 import { useTheme } from "next-themes";
 import { Moon, Sun } from "lucide-react";
 import { useState, useEffect } from "react";
+import Link from "next/link";
 
 const Navbar = () => {
   const { theme, setTheme } = useTheme();
@@ -29,7 +30,9 @@ const Navbar = () => {
   return (
     <nav className="dark:bg-black/80 bg-white border-b border-gray-850 dark:text-white/80 flex items-center justify-center py-4">
       <div className="flex justify-between w-11/12">
-        <div className="text-xl font-bold flex items-center">homi</div>
+        <div className="text-xl font-bold flex items-center">
+          <Link href={"/"}>homi</Link>
+        </div>
         <div className="flex items-center justify-center gap-4">
           <div className="flex text-white gap-2 self-start">
             {mounted && renderThemeToggle()}{" "}

@@ -1,6 +1,7 @@
 "use client";
 
-import { getLocalToken } from "@/app/(auth)/sign-up/page";
+import { getLocalToken } from "@/utils/auth";
+
 import { Popover, PopoverButton, PopoverPanel } from "@headlessui/react";
 import { CircleUser } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -21,10 +22,13 @@ export function PopOverComponent() {
       <PopoverButton className="text-sm outline-none">
         <CircleUser size={30} className="dark:text-white text-black" />
       </PopoverButton>
-      <PopoverPanel className="flex flex-col py-4 lg:w-[6vw] px-4 mt-2 absolute right-0 rounded bg-white dark:bg-[#151312] text-sm">
+      <PopoverPanel className="flex flex-col py-4 lg:w-[6vw] px-4 mt-2 absolute right-0 rounded dark:text-white bg-white  dark:bg-[#151312] text-sm">
         {token ? (
           <>
-            <span onClick={handleLogout} className="cursor-pointer">
+            <span
+              onClick={handleLogout}
+              className="cursor-pointer text-black dark:text-white"
+            >
               Logout
             </span>
             <div className="border my-2" />
